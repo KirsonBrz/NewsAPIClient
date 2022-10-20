@@ -58,8 +58,8 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
                 .into(binding.ivArticleImage)
 
             binding.root.setOnClickListener {
-                onItemClickListener?.let { unit ->
-                    unit(article)
+                onItemClickListener?.let {
+                    it(article)
                 }
             }
 

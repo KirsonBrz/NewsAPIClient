@@ -43,9 +43,9 @@ class NewsFragment : Fragment() {
         viewModel = (activity as MainActivity).viewModel
         newsAdapter = (activity as MainActivity).newsAdapter
 
-        newsAdapter.setOnItemClickListener { article ->
+        newsAdapter.setOnItemClickListener {
             val bundle = Bundle().apply {
-                putSerializable("selected_article", article)
+                putSerializable("selected_article", it)
             }
             findNavController().navigate(
                 R.id.action_newsFragment_to_infoFragment,
