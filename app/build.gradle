@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
 }
 
 android {
@@ -24,7 +25,8 @@ android {
 
     buildTypes {
         release {
-            \
+
+                        \
 //Add ProGuard
             minifyEnabled true
             //Reduce APK size
@@ -62,6 +64,12 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     //okhttp3
     implementation "com.squareup.okhttp3:logging-interceptor:$interceptor_version"
+
+
+    //Hilt
+    def dagger_hilt_version = "2.44"
+    implementation "com.google.dagger:hilt-android:$dagger_hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$dagger_hilt_version"
 
     //Kotlin Coroutines
     def coroutines_version = "1.6.4"
