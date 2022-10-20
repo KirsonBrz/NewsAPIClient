@@ -16,6 +16,7 @@ android {
 
 
         buildConfigField("String", "API_KEY", MY_KEY)
+        buildConfigField("String", "BASE_URL", MY_URL)
 
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -23,7 +24,11 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            \
+//Add ProGuard
+            minifyEnabled true
+            //Reduce APK size
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -41,6 +46,14 @@ dependencies {
 
     //JSON
     implementation 'com.google.code.gson:gson:2.9.1'
+
+    //Retrofit
+    def retrofit_version = "2.9.0"
+    def interceptor_version = "4.10.0"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    //okhttp3
+    implementation "com.squareup.okhttp3:logging-interceptor:$interceptor_version"
 
     //Kotlin Coroutines
     def coroutines_version = "1.6.4"
