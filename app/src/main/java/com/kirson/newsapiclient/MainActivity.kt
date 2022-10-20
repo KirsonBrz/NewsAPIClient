@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.kirson.newsapiclient.databinding.ActivityMainBinding
+import com.kirson.newsapiclient.presentation.adapter.NewsAdapter
 import com.kirson.newsapiclient.presentation.viewmodel.NewsViewModel
 import com.kirson.newsapiclient.presentation.viewmodel.NewsViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,6 +17,9 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var factory: NewsViewModelFactory
+
+    @Inject
+    lateinit var newsAdapter: NewsAdapter
 
     private lateinit var binding: ActivityMainBinding
     lateinit var viewModel: NewsViewModel
