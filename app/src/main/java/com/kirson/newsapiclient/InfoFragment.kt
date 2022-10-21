@@ -29,7 +29,7 @@ class InfoFragment : Fragment() {
         val article = args.selectedArticle
         fragmentInfoBinding.wvInfo.apply {
             webViewClient = WebViewClient()
-            if (article.url != "") {
+            if (article.url != null) {
                 loadUrl(article.url)
             }
 
