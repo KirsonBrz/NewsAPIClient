@@ -1,7 +1,7 @@
 package com.kirson.newsapiclient.presentation.di
 
 import android.app.Application
-import com.kirson.newsapiclient.domain.usecase.GetNewsHeadlinesUseCase
+import com.kirson.newsapiclient.domain.usecase.*
 import com.kirson.newsapiclient.presentation.viewmodel.NewsViewModelFactory
 import dagger.Module
 import dagger.Provides
@@ -18,9 +18,20 @@ class FactoryModule {
     @Provides
     fun provideNewsViewModelFactory(
         application: Application,
-        getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase
+        getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
+        getSearchedNewsUseCase: GetSearchedNewsUseCase,
+        saveNewsUseCase: SaveNewsUseCase,
+        getSavedNewsUseCase: GetSavedNewsUseCase,
+        deleteSavedNewsUseCase: DeleteSavedNewsUseCase
     ): NewsViewModelFactory {
-        return NewsViewModelFactory(application, getNewsHeadlinesUseCase)
+        return NewsViewModelFactory(
+            application,
+            getNewsHeadlinesUseCase,
+            getSearchedNewsUseCase,
+            saveNewsUseCase,
+            getSavedNewsUseCase,
+            deleteSavedNewsUseCase
+        )
     }
 
 }

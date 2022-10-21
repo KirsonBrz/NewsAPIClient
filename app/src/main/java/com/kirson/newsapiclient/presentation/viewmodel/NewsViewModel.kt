@@ -7,16 +7,22 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.kirson.newsapiclient.data.model.APIResponse
+import com.kirson.newsapiclient.data.model.Article
 import com.kirson.newsapiclient.data.util.Resource
-import com.kirson.newsapiclient.domain.usecase.GetNewsHeadlinesUseCase
+import com.kirson.newsapiclient.domain.usecase.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class NewsViewModel(
     private val app: Application,
-    val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase
+    private val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
+    private val getSearchedNewsHeadlinesUseCase: GetSearchedNewsUseCase,
+    private val saveNewsUseCase: SaveNewsUseCase,
+    private val getSavedNewsUseCase: GetSavedNewsUseCase,
+    private val deleteSavedNewsUseCase: DeleteSavedNewsUseCase
 
 ) : AndroidViewModel(app) {
 
@@ -41,6 +47,7 @@ class NewsViewModel(
         }
 
     }
+
 
     @Suppress("DEPRECATION")
     fun isInternetAvailable(context: Context?): Boolean {
@@ -71,5 +78,53 @@ class NewsViewModel(
         return result
     }
 
+    //search
+    val searchedNews: MutableLiveData<Resource<APIResponse>> = MutableLiveData()
+
+    fun getSearchedNews(
+        country: String,
+        searchQuery: String,
+        page: Int
+    ) = viewModelScope.launch {
+        searchedNews.postValue(Resource.Loading())
+        try {
+            if (isInternetAvailable(app)) {
+
+                val response = getSearchedNewsHeadlinesUseCase.execute(
+                    country,
+                    searchQuery,
+                    page
+                )
+                searchedNews.postValue(response)
+
+            } else {
+                searchedNews.postValue(Resource.Error("Internet is not available"))
+            }
+
+        } catch (e: Exception) {
+            searchedNews.postValue(Resource.Error(e.message.toString()))
+
+        }
+
+    }
+
+    //local data
+    fun saveArticle(article: Article) = viewModelScope.launch {
+        saveNewsUseCase.execute(article)
+
+    }
+
+    fun getSavedNews() = liveData {
+        getSavedNewsUseCase.execute().collect {
+            emit(it)
+        }
+    }
+
+    fun deleteArticle(article: Article) =
+        viewModelScope.launch {
+            deleteSavedNewsUseCase.execute(article)
+        }
 
 }
+
+
