@@ -12,10 +12,7 @@ import androidx.lifecycle.viewModelScope
 import com.kirson.newsapiclient.data.model.APIResponse
 import com.kirson.newsapiclient.data.model.Article
 import com.kirson.newsapiclient.data.util.Resource
-import com.kirson.newsapiclient.domain.usecase.GetNewsHeadlinesUseCase
-import com.kirson.newsapiclient.domain.usecase.GetSavedNewsUseCase
-import com.kirson.newsapiclient.domain.usecase.GetSearchedNewsUseCase
-import com.kirson.newsapiclient.domain.usecase.SaveNewsUseCase
+import com.kirson.newsapiclient.domain.usecase.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -24,7 +21,8 @@ class NewsViewModel(
     private val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
     private val getSearchedNewsHeadlinesUseCase: GetSearchedNewsUseCase,
     private val saveNewsUseCase: SaveNewsUseCase,
-    private val getSavedNewsUseCase: GetSavedNewsUseCase
+    private val getSavedNewsUseCase: GetSavedNewsUseCase,
+    private val deleteSavedNewsUseCase: DeleteSavedNewsUseCase
 
 ) : AndroidViewModel(app) {
 
@@ -122,5 +120,11 @@ class NewsViewModel(
         }
     }
 
+    fun deleteArticle(article: Article) =
+        viewModelScope.launch {
+            deleteSavedNewsUseCase.execute(article)
+        }
 
 }
+
+

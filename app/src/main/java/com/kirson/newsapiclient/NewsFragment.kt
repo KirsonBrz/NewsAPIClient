@@ -39,6 +39,8 @@ class NewsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_news, container, false)
+
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -170,7 +172,8 @@ class NewsFragment : Fragment() {
                     MainScope().launch {
                         delay(4000)
                         viewModel.getSearchedNews(country, p0.toString(), page)
-                        viewSearchedNews()
+                        // viewSearchedNews()
+
                     }
                     return false
                 }
@@ -179,6 +182,7 @@ class NewsFragment : Fragment() {
             })
 
         fragmentNewsBinding.svNews.setOnCloseListener {
+            initRecyclerView()
             viewNewsList()
             false
         }
@@ -191,39 +195,40 @@ class NewsFragment : Fragment() {
     fun viewSearchedNews() {
 
         viewModel.searchedNews.observe(
-            viewLifecycleOwner, Observer { response ->
+            viewLifecycleOwner
+        ) { response ->
 
-                when (response) {
-                    is Resource.Success -> {
-                        hideProgressBar()
-                        response.data?.let {
-                            newsAdapter.differ.submitList(it.articles.toList())
-                            pages = if (it.totalResults % 20 == 0) {
-                                it.totalResults / 20
-                            } else {
-                                it.totalResults / 20 + 1
-                            }
-                            isLastPage = page == pages
+            when (response) {
+                is Resource.Success -> {
+                    hideProgressBar()
+                    response.data?.let {
+                        newsAdapter.differ.submitList(it.articles.toList())
+                        pages = if (it.totalResults % 20 == 0) {
+                            it.totalResults / 20
+                        } else {
+                            it.totalResults / 20 + 1
                         }
-
+                        isLastPage = page == pages
                     }
-                    is Resource.Loading -> {
-                        showProgressBar()
 
-                    }
-                    is Resource.Error -> {
-                        hideProgressBar()
-                        response.message?.let {
-                            Toast.makeText(activity, "An error occured: $it", Toast.LENGTH_LONG)
-                                .show()
-                        }
+                }
+                is Resource.Loading -> {
+                    showProgressBar()
 
+                }
+                is Resource.Error -> {
+                    hideProgressBar()
+                    response.message?.let {
+                        Toast.makeText(activity, "An error occured: $it", Toast.LENGTH_LONG)
+                            .show()
                     }
 
                 }
 
+            }
 
-            })
+
+        }
 
     }
 

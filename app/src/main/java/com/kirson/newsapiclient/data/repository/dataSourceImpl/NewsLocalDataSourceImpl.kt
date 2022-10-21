@@ -18,5 +18,9 @@ class NewsLocalDataSourceImpl(
         return articleDAO.getAllArticles()
     }
 
+    override suspend fun deleteArticleFromDB(article: Article) {
+        return articleDAO.deleteArticle(article)
+    }
+
 
 }
