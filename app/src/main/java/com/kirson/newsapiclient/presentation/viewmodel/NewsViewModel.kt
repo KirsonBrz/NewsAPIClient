@@ -7,11 +7,13 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.kirson.newsapiclient.data.model.APIResponse
 import com.kirson.newsapiclient.data.model.Article
 import com.kirson.newsapiclient.data.util.Resource
 import com.kirson.newsapiclient.domain.usecase.GetNewsHeadlinesUseCase
+import com.kirson.newsapiclient.domain.usecase.GetSavedNewsUseCase
 import com.kirson.newsapiclient.domain.usecase.GetSearchedNewsUseCase
 import com.kirson.newsapiclient.domain.usecase.SaveNewsUseCase
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +23,8 @@ class NewsViewModel(
     private val app: Application,
     private val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
     private val getSearchedNewsHeadlinesUseCase: GetSearchedNewsUseCase,
-    private val saveNewsUseCase: SaveNewsUseCase
+    private val saveNewsUseCase: SaveNewsUseCase,
+    private val getSavedNewsUseCase: GetSavedNewsUseCase
 
 ) : AndroidViewModel(app) {
 
@@ -111,6 +114,12 @@ class NewsViewModel(
     fun saveArticle(article: Article) = viewModelScope.launch {
         saveNewsUseCase.execute(article)
 
+    }
+
+    fun getSavedNews() = liveData {
+        getSavedNewsUseCase.execute().collect {
+            emit(it)
+        }
     }
 
 

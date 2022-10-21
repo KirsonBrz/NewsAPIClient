@@ -2,6 +2,7 @@ package com.kirson.newsapiclient.presentation.di
 
 import android.app.Application
 import com.kirson.newsapiclient.domain.usecase.GetNewsHeadlinesUseCase
+import com.kirson.newsapiclient.domain.usecase.GetSavedNewsUseCase
 import com.kirson.newsapiclient.domain.usecase.GetSearchedNewsUseCase
 import com.kirson.newsapiclient.domain.usecase.SaveNewsUseCase
 import com.kirson.newsapiclient.presentation.viewmodel.NewsViewModelFactory
@@ -22,13 +23,15 @@ class FactoryModule {
         application: Application,
         getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
         getSearchedNewsUseCase: GetSearchedNewsUseCase,
-        saveNewsUseCase: SaveNewsUseCase
+        saveNewsUseCase: SaveNewsUseCase,
+        getSavedNewsUseCase: GetSavedNewsUseCase
     ): NewsViewModelFactory {
         return NewsViewModelFactory(
             application,
             getNewsHeadlinesUseCase,
             getSearchedNewsUseCase,
-            saveNewsUseCase
+            saveNewsUseCase,
+            getSavedNewsUseCase
         )
     }
 

@@ -2,6 +2,7 @@ package com.kirson.newsapiclient.presentation.di
 
 import com.kirson.newsapiclient.domain.repository.NewsRepository
 import com.kirson.newsapiclient.domain.usecase.GetNewsHeadlinesUseCase
+import com.kirson.newsapiclient.domain.usecase.GetSavedNewsUseCase
 import com.kirson.newsapiclient.domain.usecase.GetSearchedNewsUseCase
 import com.kirson.newsapiclient.domain.usecase.SaveNewsUseCase
 import dagger.Module
@@ -37,6 +38,14 @@ class UseCaseModule {
         newsRepository: NewsRepository
     ): SaveNewsUseCase {
         return SaveNewsUseCase(newsRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGetSavedNewsUseCase(
+        newsRepository: NewsRepository
+    ): GetSavedNewsUseCase {
+        return GetSavedNewsUseCase(newsRepository)
     }
 
 }
