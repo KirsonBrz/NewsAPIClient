@@ -11,12 +11,14 @@ import androidx.lifecycle.viewModelScope
 import com.kirson.newsapiclient.data.model.APIResponse
 import com.kirson.newsapiclient.data.util.Resource
 import com.kirson.newsapiclient.domain.usecase.GetNewsHeadlinesUseCase
+import com.kirson.newsapiclient.domain.usecase.GetSearchedNewsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class NewsViewModel(
     private val app: Application,
-    val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase
+    private val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
+    private val getSearchedNewsHeadlinesUseCase: GetSearchedNewsUseCase
 
 ) : AndroidViewModel(app) {
 
@@ -41,6 +43,7 @@ class NewsViewModel(
         }
 
     }
+
 
     @Suppress("DEPRECATION")
     fun isInternetAvailable(context: Context?): Boolean {
@@ -69,6 +72,36 @@ class NewsViewModel(
             }
         }
         return result
+    }
+
+    //search
+    val searchedNews: MutableLiveData<Resource<APIResponse>> = MutableLiveData()
+
+    fun getSearchedNews(
+        country: String,
+        searchQuery: String,
+        page: Int
+    ) = viewModelScope.launch {
+        searchedNews.postValue(Resource.Loading())
+        try {
+            if (isInternetAvailable(app)) {
+
+                val response = getSearchedNewsHeadlinesUseCase.execute(
+                    country,
+                    searchQuery,
+                    page
+                )
+                searchedNews.postValue(response)
+
+            } else {
+                searchedNews.postValue(Resource.Error("Internet is not available"))
+            }
+
+        } catch (e: Exception) {
+            searchedNews.postValue(Resource.Error(e.message.toString()))
+
+        }
+
     }
 
 
