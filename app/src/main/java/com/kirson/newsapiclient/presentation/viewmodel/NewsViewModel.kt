@@ -9,16 +9,19 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.kirson.newsapiclient.data.model.APIResponse
+import com.kirson.newsapiclient.data.model.Article
 import com.kirson.newsapiclient.data.util.Resource
 import com.kirson.newsapiclient.domain.usecase.GetNewsHeadlinesUseCase
 import com.kirson.newsapiclient.domain.usecase.GetSearchedNewsUseCase
+import com.kirson.newsapiclient.domain.usecase.SaveNewsUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class NewsViewModel(
     private val app: Application,
     private val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
-    private val getSearchedNewsHeadlinesUseCase: GetSearchedNewsUseCase
+    private val getSearchedNewsHeadlinesUseCase: GetSearchedNewsUseCase,
+    private val saveNewsUseCase: SaveNewsUseCase
 
 ) : AndroidViewModel(app) {
 
@@ -101,6 +104,12 @@ class NewsViewModel(
             searchedNews.postValue(Resource.Error(e.message.toString()))
 
         }
+
+    }
+
+    //local data
+    fun saveArticle(article: Article) = viewModelScope.launch {
+        saveNewsUseCase.execute(article)
 
     }
 
